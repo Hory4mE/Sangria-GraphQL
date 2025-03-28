@@ -34,7 +34,7 @@ object GraphQLSchema {
     val schema = Schema(QueryType)
 
     def fetchUser(id: Int): Future[Option[User]] = {
-        val url = s"http://localhost:5000/api/user/$id"
+        val url = s"http://localhost:5118/api/user/$id"
         Http().singleRequest(HttpRequest(uri = url)).flatMap { response =>
             Unmarshal(response.entity).to[String].map { jsonString =>
                 decode[User](jsonString).toOption

@@ -12,6 +12,8 @@ import sangria.parser.QueryParser
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.Directives.{complete, entity, path, post}
+import io.circe.Json
+import io.circe.parser._
 
 object Server extends App {
   implicit val system: ActorSystem = ActorSystem("graphql-server")
@@ -20,19 +22,27 @@ object Server extends App {
   implicit val timeout: Timeout = Timeout(5.seconds) // ตั้ง timeout
 
   val route: Route = path("graphql") {
-    post {
-      entity(as[String]) { queryJson =>
-        QueryParser.parse(queryJson) match {
-          case scala.util.Success(queryAst) =>
-            complete {
-              Executor.execute(GraphQLSchema.schema, queryAst)
-                .map(_.asJson.noSpaces)
-            }
-          case scala.util.Failure(error) =>
-            complete(StatusCodes.BadRequest, s"Invalid Query: ${error.getMessage}")
-        }
+     post {
+    entity(as[String]) { queryJsonString =>
+      parse(queryJsonString) match {
+        case Right(json) =>
+          json.hcursor.get[String]("query") match {
+            case Right(query) =>
+              QueryParser.parse(query) match {
+                case scala.util.Success(queryAst) =>
+                  complete {
+                    Executor.execute(GraphQLSchema.schema, queryAst)
+                      .map(_.asJson.noSpaces)
+                  }
+                case scala.util.Failure(error) =>
+                  complete(StatusCodes.BadRequest, s"Invalid Query Syntax: ${error.getMessage}")
+              }
+            case Left(_) => complete(StatusCodes.BadRequest, "Missing 'query' field in JSON")
+          }
+        case Left(_) => complete(StatusCodes.BadRequest, "Invalid JSON format")
       }
     }
+  }
   }
 
   Http().newServerAt("localhost", 8080).bind(route)
