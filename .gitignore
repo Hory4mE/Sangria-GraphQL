@@ -1,0 +1,33 @@
+# Ignore sbt and build-related files
+/.bloop/
+/.target/
+/.project/
+/.idea/
+/.vscode/
+
+# Ignore Scala specific files
+*.class
+*.log
+*.swp
+*.suo
+
+# Ignore IDE specific files
+.idea/
+.vscode/
+
+# Ignore dependency directories
+lib_managed/
+src_managed/
+target/
+
+# Ignore sbt configuration files (e.g., if you don't want to commit the project.lock file)
+project/project/
+/project/target/
+/*.lock
+
+# Ignore OS specific files
+.DS_Store
+Thumbs.db
+
+# Ignore environment configuration files (if any)
+.env
