@@ -14,9 +14,9 @@ libraryDependencies ++= Seq(
   toolkitTest % Test,
   "org.sangria-graphql" %% "sangria" % "4.2.5",   
   "org.sangria-graphql" %% "sangria-circe" % "1.3.2",
-  "com.typesafe.akka" %% "akka-actor" % akkaVersion cross CrossVersion.for3Use2_13,  // ใช้เวอร์ชันที่รองรับ Scala 3
-  "com.typesafe.akka" %% "akka-stream" % akkaVersion cross CrossVersion.for3Use2_13, // ใช้เวอร์ชันที่รองรับ Scala 3
-  "com.typesafe.akka" %% "akka-http" % akkaHttpVersion cross CrossVersion.for3Use2_13,  // รองรับ Scala 3
+  "com.typesafe.akka" %% "akka-actor" % akkaVersion cross CrossVersion.for3Use2_13,  //  Scala 3 conversion support
+  "com.typesafe.akka" %% "akka-stream" % akkaVersion cross CrossVersion.for3Use2_13, //  Scala 3 conversion support
+  "com.typesafe.akka" %% "akka-http" % akkaHttpVersion cross CrossVersion.for3Use2_13,  //  Scala 3 conversion support
   "io.circe" %% "circe-parser" % "0.14.1", 
   "io.circe" %% "circe-generic" % "0.14.1" 
 )
